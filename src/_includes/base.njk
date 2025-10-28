@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ title or site.title }}</title>
+  <link rel="stylesheet" href="/assets/styles.css" />
+</head>
+<body>
+  <header class="wrap">
+    <a href="/"><strong>{{ site.title }}</strong></a> · <a href="/blog/">Blog</a>
+  </header>
+  <main class="wrap">
+    {{ content | safe }}
+  </main>
+  <footer class="wrap"><small>© {{ site.year }} {{ site.author }}</small></footer>
+</body>
+</html>
