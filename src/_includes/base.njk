@@ -4,15 +4,27 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ title or site.title }}</title>
-  <link rel="stylesheet" href="/assets/styles.css" />
+  <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body>
-  <header class="wrap">
-    <a href="/"><strong>{{ site.title }}</strong></a> · <a href="/blog/">Blog</a>
+  <header class="site-header">
+    <nav class="site-nav" aria-label="Primary">
+      <div class="nav-inner">
+        <a class="brand" href="/">aidenseo</a>
+        <div class="main-links">
+          <a class="nav-link" href="/about/">about</a>
+          <a class="nav-link" href="/works/">works</a>
+          <a class="nav-link" href="/archive/">archive</a>
+        </div>
+        <div class="contact-links">
+          <a class="nav-link" href="https://www.linkedin.com/in/aidenseo" target="_blank" rel="noopener noreferrer">in</a>
+          <a class="nav-link" href="mailto:aidenjseo11@gmail.com">mail</a>
+        </div>
+      </div>
+    </nav>
   </header>
   <main class="wrap">
     {{ content | safe }}
   </main>
-  <footer class="wrap"><small>© {{ site.year }} {{ site.author }}</small></footer>
 </body>
 </html>
