@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Condensed:wght@400;500;600;800&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap");
 
 *, *::before, *::after {box-sizing: border-box;}
 * {margin: 0;}
@@ -12,10 +12,16 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 
 :root{
   --green:#008500;
-  --pink-l: #850085;
+  --pink: #850085;
   --white:#FCFCFC; --black:#111111;
-  --page-pad: 1rem;
-  --nav-top-offset: 0.25rem;
+  /* RGB tuple for black to use in rgba() */
+  --black-rgb: 17, 17, 17;
+  --page-pad: 1.5rem;
+  --nav-top-offset: -0.25rem;
+  --nav-font-size: clamp(16px, calc(12.7px + 0.884vw), 24px);
+  --nav-center-y: calc(var(--page-pad) + var(--nav-top-offset) + 0.5 * var(--nav-font-size));
+  --aidenseo-baseline-y: calc(100svh - var(--brand-hero-bottom-nudge));
+  --hero-top-offset: 0px; /* subtract header height so .brand-logo sits at visual bottom */
   --margin-xxl: 1.375rem; /* +6px */
   --margin-xl:  1.25rem;  /* +4px */
   --margin-l:   1.125rem; /* +2px */
@@ -25,10 +31,158 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   --margin-xxs: 0.625rem; /* -6px */
   --margin-0: 0;
   /* Nudge amount for main links at >=1000px (adjust to taste) */
-  --nav-main-links-nudge-1000: -120px;
+  --nav-main-links-nudge-1000: -95px;
+  --space-1: 1rem;
+  --space-2: 2rem;
+  --space-4: 4rem;
+  --space-8: 8rem;
+  --space-16: 16rem;
+  --space-32: 32rem;
+  --space-64: 64rem;
+  --space-128: 128rem;
+  --space-256: 256rem;
+  /* Vertical nudge for brand-hero logos from the bottom */
+  --brand-hero-bottom-nudge: 2.25rem; 
+}
+
+@media (max-width: 450px) {
+  :root {
+    --page-pad: 1rem;
+  }
 }
 
 
+
+
+/* Main Line on Home Page */
+.main-line {
+  position: relative;
+  top: -6.5rem;            /* <-- nudge upward */
+
+  font-family: "IBM Plex Serif", "Times New Roman", serif;
+  font-size: clamp(23px, calc(17.0141px + 1.5962vw), 40px);
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--black);
+  z-index: 5;
+  word-spacing: 0em;
+  letter-spacing: -0.005em;
+  max-width: 90vw;  /* lets it wrap when the viewport is actually too small */
+  text-shadow: 
+              1px 2px 2px rgba(var(--black-rgb), 0.06), 
+              2px 4px 4px rgba(var(--black-rgb), 0.10); 
+}
+
+@media (max-width: 900px) {
+  .main-line {
+    top: -3rem;        /* less nudge on smaller screens */
+  }
+}
+
+.main-line .focus-box {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.08em 0.4em;
+  margin-inline: 0.08em;
+  border-radius: var(--focus-box-radius);
+  background: var(--focus-box-bg);
+  color: inherit;
+  line-height: 1;
+  box-shadow: 0 0 0 0 var(--focus-box-shadow);
+  animation: focusBoxGlow var(--focus-box-duration) ease-in-out infinite;
+  transition: filter 180ms ease;
+}
+
+.main-line .focus-box::before {
+  content: "";
+  position: absolute;
+  inset: -0.18em;
+  border-radius: calc(var(--focus-box-radius) * 1.35);
+  border: 1.8px solid var(--focus-box-border);
+  opacity: 0.8;
+  transform: scale(0.88);
+  animation: focusBoxPulse var(--focus-box-duration) ease-in-out infinite;
+}
+
+.main-line .focus-box:hover {
+  filter: brightness(1.05);
+}
+
+.main-line .focus-box:hover::before {
+  opacity: 1;
+}
+
+/* Brand Hero: layer EN (right) over KR (left) on same line */
+.brand-hero {
+  position: relative;
+  min-height: calc(100svh - var(--hero-top-offset));
+  isolation: isolate;
+
+  display: flex;                /* make it a flex container */
+  align-items: center;          /* vertical center */
+  justify-content: center;      /* horizontal center */
+  text-align: center;           /* center text inside the flex child */
+}
+
+.brand-hero > .brand-logo,
+.brand-hero > .brand-logo-kr {
+  position: absolute;
+  /* body/page padding provides the 1rem gutter; add extra offset via var */
+  bottom: var(--brand-hero-bottom-nudge, 0);
+}
+
+.brand-hero > .brand-logo {
+  right: 0;
+  z-index: 2;
+  mix-blend-mode: normal;
+}
+.brand-hero > .brand-logo-kr { left: 0; z-index: 1; }
+
+.big-logo {
+  font-family: "IBM Plex Sans", system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
+  font-size: clamp(82px, calc(15.77px + 0.16683 * 100vw), 256px);
+  color: var(--green);
+  visibility: visible;         /* we’re not doing entrance animation yet */
+  line-height: 0.8; 
+  text-shadow: 
+               1px 2px 2px rgba(var(--black-rgb), 0.06), 
+               2px 4px 4px rgba(var(--black-rgb), 0.10), 
+               4px 8px 8px rgba(var(--black-rgb), 0.14),
+               8px 16px 16px rgba(var(--black-rgb), 0.18);
+}
+
+
+.brand-logo-kr {
+  /* base styles when used outside .brand-hero */
+  padding: 0;
+  background: transparent;
+  transform-origin: bottom left; /* anchor scaling from corner */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.big-logo-kr {
+  font-family: "IBM Plex Sans KR", "IBM Plex Sans", system-ui, sans-serif;
+  font-weight: 400;                  /* regular instead of bold */
+  letter-spacing: -0.02em;
+  margin: 0;
+  text-align: left;
+  white-space: nowrap;
+  font-size: clamp(82px, calc(15.77px + 0.16683 * 100vw), 256px);
+  line-height: 0.8;
+
+  color: var(--pink);
+  opacity: 0.25;            
+  filter: blur(6px);
+}
 
 
 /* Navigation Styles */
@@ -46,7 +200,7 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   background-color: transparent;
   color: var(--black);
   font-family: "IBM Plex Sans Condensed", "Helvetica Neue", Arial, sans-serif;
-  font-size: clamp(16px, calc(14px + 0.8vw), 24px);
+  font-size: var(--nav-font-size);
   line-height: 1;
 }
 
@@ -66,8 +220,10 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   letter-spacing: 0.04em;
   text-transform: lowercase;
   white-space: nowrap;
-  color: rgba(0, 0, 0, 0.25);
+  color: rgba(var(--black-rgb), 0.30);
   transition: color 150ms ease;
+  justify-self: start;
+  width: max-content;
 }
 
 .brand:hover,
@@ -91,7 +247,7 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 
 .nav-link {
   text-decoration: none;
-  color: rgba(0, 0, 0, 0.25);
+  color: rgba(var(--black-rgb), 0.30);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: lowercase;
@@ -119,7 +275,17 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
     column-gap: 12px;
   }
 }
+@media (max-width: 450px) {
 
+
+  .main-links {
+    column-gap: 12px;
+  }
+
+  .contact-links {
+    column-gap: 12px;
+  }
+}
 
 
 @media (max-width: 1000px) {
@@ -131,3 +297,73 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 /* Universal 1rem page padding and fixed nav offsets */
 body { padding: var(--page-pad); }
 .site-nav { top: calc(var(--page-pad) + var(--nav-top-offset)); left: var(--page-pad); right: var(--page-pad); }
+
+
+
+
+
+
+/* Space-System */
+.spacer {
+  width: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.spacer.space-1   { height: var(--space-1); }
+.spacer.space-2   { height: var(--space-2); }
+.spacer.space-4   { height: var(--space-4); }
+.spacer.space-8   { height: var(--space-8); }
+.spacer.space-16  { height: var(--space-16); }
+.spacer.space-32  { height: var(--space-32); }
+.spacer.space-64  { height: var(--space-64); }
+.spacer.space-128 { height: var(--space-128); }
+.spacer.space-256 { height: var(--space-256); }
+
+.rule {
+  border: 0;
+  border-top: 1px solid currentColor; /* thin line, inherits text color */
+  background: transparent;
+  width: 100%;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.rule.space-1   { margin-top: var(--space-1);   margin-bottom: var(--space-1); }
+.rule.space-2   { margin-top: var(--space-2);   margin-bottom: var(--space-2); }
+.rule.space-4   { margin-top: var(--space-4);   margin-bottom: var(--space-4); }
+.rule.space-8   { margin-top: var(--space-8);   margin-bottom: var(--space-8); }
+.rule.space-16  { margin-top: var(--space-16);  margin-bottom: var(--space-16); }
+.rule.space-32  { margin-top: var(--space-32);  margin-bottom: var(--space-32); }
+.rule.space-64  { margin-top: var(--space-64);  margin-bottom: var(--space-64); }
+.rule.space-128 { margin-top: var(--space-128); margin-bottom: var(--space-128); }
+.rule.space-256 { margin-top: var(--space-256); margin-bottom: var(--space-256); }
+
+@keyframes focusBoxGlow {
+  0% {
+    box-shadow: 0 0 0 0 var(--focus-box-shadow);
+  }
+  55% {
+    box-shadow: 0 0 0 0.65em var(--focus-box-shadow-strong);
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--focus-box-shadow);
+  }
+}
+
+@keyframes focusBoxPulse {
+  0% {
+    opacity: 0.65;
+    transform: scale(0.88);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(0.9);
+  }
+}
