@@ -4,9 +4,15 @@ layout: base.njk
 ---
 
 <section class="brand-hero" aria-label="brand">
-  <p class="main-line">
-    i am a korean american comp bio researcher @ cu anschutz
-  </p>
+  <div class="brand-copy">
+    <p class="main-line">
+      i am a korean american comp bio researcher @ cu anschutz
+    </p>
+    <p class="rna-sequence">
+      UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA
+    </p>
+  </div>
+  <p class="lrfa">leave room for air</p>
   <div class="brand-logo-kr" aria-hidden="true">
     <p class="big-logo-kr">서정민</p>
   </div>

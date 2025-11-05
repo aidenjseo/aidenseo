@@ -1,30 +1,33 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ title or site.title }}</title>
-  <link rel="stylesheet" href="/assets/css/style.css"/>
-</head>
-<body>
-  <header class="site-header">
-    <nav class="site-nav" aria-label="Primary">
-      <div class="nav-inner">
-        <a class="brand" href="/">aidenseo</a>
-        <div class="main-links">
-          <a class="nav-link" href="/about/">about</a>
-          <a class="nav-link" href="/works/">works</a>
-          <a class="nav-link" href="/archive/">archive</a>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{{ title}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans+KR:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+JP:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Thai+Looped:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Devanagari:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Hebrew:wght@100;200;300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"/>
+    <link rel="stylesheet" href="/assets/css/style.css"/>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="site-nav" aria-label="Primary">
+        <div class="nav-inner">
+          <a class="brand" href="/">aidenseo</a>
+          <div class="main-links">
+            <a class="nav-link" href="/about/">about</a>
+            <a class="nav-link" href="/works/">works</a>
+            <a class="nav-link" href="/archive/">archive</a>
+          </div>
+          <div class="contact-links">
+            <a class="nav-link" href="https://www.linkedin.com/in/aidenseo" target="_blank" rel="noopener noreferrer">in</a>
+            <a class="nav-link" href="mailto:aidenjseo11@gmail.com">mail</a>
+          </div>
         </div>
-        <div class="contact-links">
-          <a class="nav-link" href="https://www.linkedin.com/in/aidenseo" target="_blank" rel="noopener noreferrer">in</a>
-          <a class="nav-link" href="mailto:aidenjseo11@gmail.com">mail</a>
-        </div>
-      </div>
-    </nav>
-  </header>
-  <main class="wrap">
-    {{ content | safe }}
-  </main>
-</body>
+      </nav>
+    </header>
+    <main class="wrap">
+      {{ content | safe }}
+    </main>
+  </body>
 </html>

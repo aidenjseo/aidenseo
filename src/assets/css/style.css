@@ -1,37 +1,91 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=IBM+Plex+Sans+Condensed:wght@400;500;600;800&family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Serif:wght@400;500;600;700&display=swap");
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+* {
+  margin: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    interpolate-size: allow-keywords;
+  }
+}
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
 
-*, *::before, *::after {box-sizing: border-box;}
-* {margin: 0;}
-@media (prefers-reduced-motion: no-preference) {html {interpolate-size: allow-keywords;}}
-body {line-height: 1.5;-webkit-font-smoothing: antialiased;}
-img, picture, video, canvas, svg {display: block;max-width: 100%;}
-input, button, textarea, select {font: inherit;}p, h1, h2, h3, h4, h5, h6 {overflow-wrap: break-word;}
-p {text-wrap: pretty;}
-h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
-#root, #__next {isolation: isolate;}
+html,
+body {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+}
+#root,
+#__next {
+  isolation: isolate;
+}
 
-:root{
-  --green:#008500;
+:root {
+  --green: #008500;
   --pink: #850085;
-  --white:#FCFCFC; --black:#111111;
+  --white: #fcfcfc;
+  --black: #111111;
   /* RGB tuple for black to use in rgba() */
   --black-rgb: 17, 17, 17;
-  --page-pad: 1.5rem;
+  --page-pad: clamp(1rem, calc(0.824rem + 0.7512vw), 1.5rem);
   --nav-top-offset: -0.25rem;
   --nav-font-size: clamp(16px, calc(12.7px + 0.884vw), 24px);
-  --nav-center-y: calc(var(--page-pad) + var(--nav-top-offset) + 0.5 * var(--nav-font-size));
+  --nav-center-y: calc(
+    var(--page-pad) + var(--nav-top-offset) + 0.5 * var(--nav-font-size)
+  );
   --aidenseo-baseline-y: calc(100svh - var(--brand-hero-bottom-nudge));
   --hero-top-offset: 0px; /* subtract header height so .brand-logo sits at visual bottom */
   --margin-xxl: 1.375rem; /* +6px */
-  --margin-xl:  1.25rem;  /* +4px */
-  --margin-l:   1.125rem; /* +2px */
-  --margin-m:   1rem;     /* base */
-  --margin-s:   0.875rem; /* -2px */
-  --margin-xs:  0.75rem;  /* -4px */
+  --margin-xl: 1.25rem; /* +4px */
+  --margin-l: 1.125rem; /* +2px */
+  --margin-m: 1rem; /* base */
+  --margin-s: 0.875rem; /* -2px */
+  --margin-xs: 0.75rem; /* -4px */
   --margin-xxs: 0.625rem; /* -6px */
   --margin-0: 0;
   /* Nudge amount for main links at >=1000px (adjust to taste) */
-  --nav-main-links-nudge-1000: -95px;
+  --nav-main-links-nudge-1000: -100px;
   --space-1: 1rem;
   --space-2: 2rem;
   --space-4: 4rem;
@@ -42,76 +96,76 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   --space-128: 128rem;
   --space-256: 256rem;
   /* Vertical nudge for brand-hero logos from the bottom */
-  --brand-hero-bottom-nudge: 2.25rem; 
+  --brand-hero-bottom-nudge: 2.25rem;
 }
-
-@media (max-width: 450px) {
-  :root {
-    --page-pad: 1rem;
-  }
-}
-
-
-
 
 /* Main Line on Home Page */
+.brand-copy {
+  position: relative;
+  top: clamp(-8rem, calc(-1.9155rem - 6.7606vw), -3.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
 .main-line {
   position: relative;
-  top: -6.5rem;            /* <-- nudge upward */
 
   font-family: "IBM Plex Serif", "Times New Roman", serif;
-  font-size: clamp(23px, calc(17.0141px + 1.5962vw), 40px);
+  font-size: clamp(22px, calc(15.662px + 1.69014vw), 40px);
   font-weight: 500;
   line-height: 1.2;
   color: var(--black);
   z-index: 5;
-  word-spacing: 0em;
-  letter-spacing: -0.005em;
-  max-width: 90vw;  /* lets it wrap when the viewport is actually too small */
-  text-shadow: 
-              1px 2px 2px rgba(var(--black-rgb), 0.06), 
-              2px 4px 4px rgba(var(--black-rgb), 0.10); 
+  word-spacing: 0.02em;
+  letter-spacing: 0em;
+  max-width: 90vw; /* lets it wrap when the viewport is actually too small */
+  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+    2px 4px 4px rgba(var(--black-rgb), 0.1);
 }
 
-@media (max-width: 900px) {
-  .main-line {
-    top: -3rem;        /* less nudge on smaller screens */
+.rna-sequence {
+  margin: -0.5rem 0 0;
+  display: block;
+  font-family: "IBM Plex Mono", "IBM Plex Sans", monospace;
+  font-size: clamp(10px, calc(7.8873px + 0.56338vw), 16px);
+  white-space: nowrap;
+  color: var(--pink);
+  letter-spacing: -0.05em;
+  opacity: 0.5;
+  filter: blur(clamp(0.7px, calc(0.4535px + 0.06573vw), 1.4px));
+  user-select: none;
+  will-change: transform;
+  animation: rnaRevolve 20s linear infinite normal;
+}
+
+@keyframes rnaRevolve {
+  from {
+    transform: translateX(calc(50% - 50vw));
+  }
+  to {
+    transform: translateX(calc(50vw + 50%));
   }
 }
 
-.main-line .focus-box {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.08em 0.4em;
-  margin-inline: 0.08em;
-  border-radius: var(--focus-box-radius);
-  background: var(--focus-box-bg);
-  color: inherit;
-  line-height: 1;
-  box-shadow: 0 0 0 0 var(--focus-box-shadow);
-  animation: focusBoxGlow var(--focus-box-duration) ease-in-out infinite;
-  transition: filter 180ms ease;
+@media (prefers-reduced-motion: reduce) {
+  .rna-sequence {
+    animation: none;
+  }
 }
 
-.main-line .focus-box::before {
-  content: "";
+.lrfa {
   position: absolute;
-  inset: -0.18em;
-  border-radius: calc(var(--focus-box-radius) * 1.35);
-  border: 1.8px solid var(--focus-box-border);
-  opacity: 0.8;
-  transform: scale(0.88);
-  animation: focusBoxPulse var(--focus-box-duration) ease-in-out infinite;
-}
-
-.main-line .focus-box:hover {
-  filter: brightness(1.05);
-}
-
-.main-line .focus-box:hover::before {
-  opacity: 1;
+  bottom: clamp(6rem, calc(2.831rem + 13.521vw), 15rem);
+  right: clamp(3.5rem, calc(-4.411rem + 33.756vw), 26rem);
+  font-family: "IBM Plex Serif", "Times New Roman", serif;
+  font-size: clamp(16px, calc(14.59px + 0.3756vw), 20px);
+  font-weight: 500;
+  color: var(--pink);
+  font-style: italic;
+  user-select: none;
 }
 
 /* Brand Hero: layer EN (right) over KR (left) on same line */
@@ -120,10 +174,10 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   min-height: calc(100svh - var(--hero-top-offset));
   isolation: isolate;
 
-  display: flex;                /* make it a flex container */
-  align-items: center;          /* vertical center */
-  justify-content: center;      /* horizontal center */
-  text-align: center;           /* center text inside the flex child */
+  display: flex; /* make it a flex container */
+  align-items: center; /* vertical center */
+  justify-content: center; /* horizontal center */
+  text-align: center; /* center text inside the flex child */
 }
 
 .brand-hero > .brand-logo,
@@ -138,7 +192,15 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   z-index: 2;
   mix-blend-mode: normal;
 }
-.brand-hero > .brand-logo-kr { left: 0; z-index: 1; }
+.brand-hero > .brand-logo-kr {
+  left: 0;
+  z-index: 1;
+  bottom: clamp(
+    var(--brand-hero-bottom-nudge, 0),
+    calc(var(--brand-hero-bottom-nudge, 0) + 1.4815vw - 0.8333rem),
+    calc(var(--brand-hero-bottom-nudge, 0) + 0.5rem)
+  );
+}
 
 .big-logo {
   font-family: "IBM Plex Sans", system-ui, sans-serif;
@@ -148,17 +210,16 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   margin: 0;
   text-align: right;
   white-space: nowrap;
-  font-size: clamp(82px, calc(15.77px + 0.16683 * 100vw), 256px);
+  font-size: clamp(76px, calc(12.62px + 0.16901 * 100vw), 256px);
   color: var(--green);
-  visibility: visible;         /* we’re not doing entrance animation yet */
-  line-height: 0.8; 
-  text-shadow: 
-               1px 2px 2px rgba(var(--black-rgb), 0.06), 
-               2px 4px 4px rgba(var(--black-rgb), 0.10), 
-               4px 8px 8px rgba(var(--black-rgb), 0.14),
-               8px 16px 16px rgba(var(--black-rgb), 0.18);
+  opacity: 0.8;
+  visibility: visible; /* we’re not doing entrance animation yet */
+  line-height: 0.8;
+  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+    2px 4px 4px rgba(var(--black-rgb), 0.1),
+    4px 8px 8px rgba(var(--black-rgb), 0.14),
+    8px 16px 16px rgba(var(--black-rgb), 0.18);
 }
-
 
 .brand-logo-kr {
   /* base styles when used outside .brand-hero */
@@ -171,19 +232,18 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 
 .big-logo-kr {
   font-family: "IBM Plex Sans KR", "IBM Plex Sans", system-ui, sans-serif;
-  font-weight: 400;                  /* regular instead of bold */
+  font-weight: 400; /* regular instead of bold */
   letter-spacing: -0.02em;
   margin: 0;
   text-align: left;
   white-space: nowrap;
-  font-size: clamp(82px, calc(15.77px + 0.16683 * 100vw), 256px);
+  font-size: clamp(76px, calc(19.66px + 0.15023 * 100vw), 236px);
   line-height: 0.8;
 
   color: var(--pink);
-  opacity: 0.25;            
-  filter: blur(6px);
+  opacity: 0.25;
+  filter: blur(4px);
 }
-
 
 /* Navigation Styles */
 .site-header {
@@ -220,7 +280,7 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
   letter-spacing: 0.04em;
   text-transform: lowercase;
   white-space: nowrap;
-  color: rgba(var(--black-rgb), 0.30);
+  color: rgba(var(--black-rgb), 0.3);
   transition: color 150ms ease;
   justify-self: start;
   width: max-content;
@@ -247,7 +307,7 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 
 .nav-link {
   text-decoration: none;
-  color: rgba(var(--black-rgb), 0.30);
+  color: rgba(var(--black-rgb), 0.3);
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: lowercase;
@@ -259,8 +319,6 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 .nav-link:focus-visible {
   color: var(--green);
 }
-
-
 
 @media (max-width: 720px) {
   .site-nav {
@@ -275,18 +333,15 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
     column-gap: 12px;
   }
 }
+
 @media (max-width: 450px) {
-
-
   .main-links {
-    column-gap: 12px;
+    column-gap: 16px;
   }
-
   .contact-links {
     column-gap: 12px;
   }
 }
-
 
 @media (max-width: 1000px) {
   .main-links {
@@ -295,13 +350,14 @@ h1, h2, h3, h4, h5, h6 {text-wrap: balance;}
 }
 
 /* Universal 1rem page padding and fixed nav offsets */
-body { padding: var(--page-pad); }
-.site-nav { top: calc(var(--page-pad) + var(--nav-top-offset)); left: var(--page-pad); right: var(--page-pad); }
-
-
-
-
-
+body {
+  padding: var(--page-pad);
+}
+.site-nav {
+  top: calc(var(--page-pad) + var(--nav-top-offset));
+  left: var(--page-pad);
+  right: var(--page-pad);
+}
 
 /* Space-System */
 .spacer {
@@ -311,15 +367,33 @@ body { padding: var(--page-pad); }
   margin: 0;
 }
 
-.spacer.space-1   { height: var(--space-1); }
-.spacer.space-2   { height: var(--space-2); }
-.spacer.space-4   { height: var(--space-4); }
-.spacer.space-8   { height: var(--space-8); }
-.spacer.space-16  { height: var(--space-16); }
-.spacer.space-32  { height: var(--space-32); }
-.spacer.space-64  { height: var(--space-64); }
-.spacer.space-128 { height: var(--space-128); }
-.spacer.space-256 { height: var(--space-256); }
+.spacer.space-1 {
+  height: var(--space-1);
+}
+.spacer.space-2 {
+  height: var(--space-2);
+}
+.spacer.space-4 {
+  height: var(--space-4);
+}
+.spacer.space-8 {
+  height: var(--space-8);
+}
+.spacer.space-16 {
+  height: var(--space-16);
+}
+.spacer.space-32 {
+  height: var(--space-32);
+}
+.spacer.space-64 {
+  height: var(--space-64);
+}
+.spacer.space-128 {
+  height: var(--space-128);
+}
+.spacer.space-256 {
+  height: var(--space-256);
+}
 
 .rule {
   border: 0;
@@ -331,15 +405,42 @@ body { padding: var(--page-pad); }
   margin-right: 0;
 }
 
-.rule.space-1   { margin-top: var(--space-1);   margin-bottom: var(--space-1); }
-.rule.space-2   { margin-top: var(--space-2);   margin-bottom: var(--space-2); }
-.rule.space-4   { margin-top: var(--space-4);   margin-bottom: var(--space-4); }
-.rule.space-8   { margin-top: var(--space-8);   margin-bottom: var(--space-8); }
-.rule.space-16  { margin-top: var(--space-16);  margin-bottom: var(--space-16); }
-.rule.space-32  { margin-top: var(--space-32);  margin-bottom: var(--space-32); }
-.rule.space-64  { margin-top: var(--space-64);  margin-bottom: var(--space-64); }
-.rule.space-128 { margin-top: var(--space-128); margin-bottom: var(--space-128); }
-.rule.space-256 { margin-top: var(--space-256); margin-bottom: var(--space-256); }
+.rule.space-1 {
+  margin-top: var(--space-1);
+  margin-bottom: var(--space-1);
+}
+.rule.space-2 {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+.rule.space-4 {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+.rule.space-8 {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-8);
+}
+.rule.space-16 {
+  margin-top: var(--space-16);
+  margin-bottom: var(--space-16);
+}
+.rule.space-32 {
+  margin-top: var(--space-32);
+  margin-bottom: var(--space-32);
+}
+.rule.space-64 {
+  margin-top: var(--space-64);
+  margin-bottom: var(--space-64);
+}
+.rule.space-128 {
+  margin-top: var(--space-128);
+  margin-bottom: var(--space-128);
+}
+.rule.space-256 {
+  margin-top: var(--space-256);
+  margin-bottom: var(--space-256);
+}
 
 @keyframes focusBoxGlow {
   0% {
