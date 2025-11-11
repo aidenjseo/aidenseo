@@ -16,6 +16,7 @@ const HOLD_INTERVAL_MS = 4000;
 const MAX_FILLER_ATTEMPTS = 240;
 const FILLER_TOLERANCE_PX = 1;
 const MAX_ITEM_NUDGE_PX = 6;
+const RESERVE_NUCLEOTIDE = "A";
 const NUCLEOTIDE_BASES = ["A", "U", "G", "C"];
 const FILLER_CODONS = (() => {
   const codons = [];
@@ -191,7 +192,16 @@ const resetItemNudges = () => {
 
 const applyItemNudge = (index, amountPx) => {
   if (!state.track || !Number.isFinite(index)) return;
-  const clamped = Math.max(0, Math.min(MAX_ITEM_NUDGE_PX, amountPx || 0));
+  const clamped = (() => {
+    if (!Number.isFinite(amountPx)) return 0;
+    if (amountPx > 0) {
+      return Math.min(MAX_ITEM_NUDGE_PX, amountPx);
+    }
+    if (amountPx < 0) {
+      return Math.max(-MAX_ITEM_NUDGE_PX, amountPx);
+    }
+    return 0;
+  })();
   const current = state.itemNudges.get(index);
   if (current === clamped) return;
   state.itemNudges.set(index, clamped);
@@ -241,6 +251,7 @@ const fitSeparatorFiller = (separator, baseGapPx) => {
   const maxWidth = baseGapPx + MAX_ITEM_NUDGE_PX;
   let filler = "";
   let measuredWidth = 0;
+  let reserveAdded = false;
   separator.textContent = "";
 
   const tryAppend = (chunk) => {
@@ -254,6 +265,20 @@ const fitSeparatorFiller = (separator, baseGapPx) => {
     }
     separator.textContent = filler;
     return false;
+  };
+
+  const ensureReserveBase = () => {
+    if (!RESERVE_NUCLEOTIDE || reserveAdded) return;
+    const candidate = filler ? `${filler}${RESERVE_NUCLEOTIDE}` : RESERVE_NUCLEOTIDE;
+    separator.textContent = candidate;
+    const width = separator.scrollWidth;
+    if (width <= maxWidth) {
+      filler = candidate;
+      measuredWidth = width;
+      reserveAdded = true;
+    } else {
+      separator.textContent = filler;
+    }
   };
 
   let iterations = 0;
@@ -278,6 +303,8 @@ const fitSeparatorFiller = (separator, baseGapPx) => {
     iterations += 1;
   }
 
+  ensureReserveBase();
+
   if (!filler.length) {
     const base = pickRandomBase();
     filler = base;
@@ -287,12 +314,15 @@ const fitSeparatorFiller = (separator, baseGapPx) => {
 
   const appliedWidth = measuredWidth || baseGapPx;
   const overflowPx = Math.max(0, appliedWidth - baseGapPx);
+  const deficitPx = reserveAdded ? Math.min(0, measuredWidth - baseGapPx) : 0;
 
   return {
     filler,
     fillerWidth: measuredWidth,
     overflowPx,
     appliedWidth: Math.min(appliedWidth, maxWidth),
+    reserveAdded,
+    deficitPx,
   };
 };
 
@@ -694,15 +724,22 @@ const updateSeparatorWidths = (speed) => {
       separator.textContent = customText;
       appliedWidth = Math.max(baseGapPx, separator.scrollWidth);
     } else {
-      const { appliedWidth: resolvedWidth, overflowPx } = fitSeparatorFiller(
+      const {
+        appliedWidth: resolvedWidth,
+        overflowPx,
+        reserveAdded,
+        deficitPx,
+      } = fitSeparatorFiller(
         separator,
         baseGapPx
       );
       appliedWidth = resolvedWidth;
-      if (overflowPx > 0) {
-        const followerIndex = Number(separator.dataset.rnaFollowerIndex ?? NaN);
-        if (Number.isFinite(followerIndex)) {
+      const followerIndex = Number(separator.dataset.rnaFollowerIndex ?? NaN);
+      if (Number.isFinite(followerIndex)) {
+        if (overflowPx > 0) {
           applyItemNudge(followerIndex, overflowPx);
+        } else if (reserveAdded && deficitPx < -FILLER_TOLERANCE_PX) {
+          applyItemNudge(followerIndex, deficitPx);
         }
       }
     }
