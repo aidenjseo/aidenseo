@@ -29,5 +29,8 @@
     <main class="wrap">
       {{ content | safe }}
     </main>
+    {% if loadRnaScripts %}
+      {% include "javascript/rna-scripts.njk" %}
+    {% endif %}
   </body>
 </html>

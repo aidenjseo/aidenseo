@@ -1,15 +1,19 @@
 ---
 title: Aiden Seo
 layout: base.njk
+loadRnaScripts: true
 ---
 
 <section class="brand-hero" aria-label="brand">
   <div class="brand-copy">
     <p class="main-line">
-      i am a korean american comp bio researcher @ cu anschutz
+      <span data-rna-root>i am a korean american</span>
+      <span data-rna-phrase>comp bio researcher @ cu anschutz</span>
     </p>
     <p class="rna-sequence">
-      UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA
+      <span class="trans" data-rna-sequence>
+        UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA
+      </span>
     </p>
   </div>
   <p class="lrfa">leave room for air</p>
