@@ -1,41 +1,41 @@
 [
   {
-    "id": "seq-01a",
+    "id": "seq-01",
     "root": "i am a korean american",
     "phrase": "comp bio researcher @ cu anschutz",
     "sequence": "UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA",
     "weight": 1
   },
   {
-    "id": "seq-01b",
+    "id": "seq-02",
     "root": "i am a korean american",
     "phrase": "participant of ylc @ jeffco",
-    "sequence": "UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA",
+    "sequence": "CCUGCUCGUACUAUUUGUAUUCCUGCUAAUACUUAGUUUUAUCUUUGUGCCCUUGAAUUUUUUUGUUAG",
     "weight": 1
   },
   {
-    "id": "seq-02",
+    "id": "seq-03",
     "root": "i am a korean american",
     "phrase": "junior @ chatfield hs",
     "sequence": "CUUUGAAAUAUUUAGCGUGCCUGUCAUGCUACUUUUAUUGAACUUGAUCAUUCU",
     "weight": 1
   },
   {
-    "id": "seq-03",
+    "id": "seq-04",
     "root": "i am a korean american",
     "phrase": "writer & poet @ aidenseo.com",
     "sequence": "UGGCGUAUUACUGAACGUGCACCUUAGGAAACUGCCGCUAUUGAUGAAAAUUCUGAAUAGUGUUAGAUG",
     "weight": 1
   },
   {
-    "id": "seq-04",
+    "id": "seq-05",
     "root": "i am a korean american",
     "phrase": "youth group member @ kcc",
     "sequence": "UAUUAGUGAACUCAUGGUCGUUAGUGACCUAUGGAAAUGAAUGAACGUGCCAAAUGUUGU",
     "weight": 1
   },
   {
-    "id": "seq-05",
+    "id": "seq-06",
     "root": "i am a korean american",
     "phrase": "watercolor & acrylic artist @ home",
     "sequence": "UGGGCUACUGAACGUUGUUAGCUUUAGCGUGCAGCUUGUCGUUAUCUUAUUUGUGCUCGUACUAUUUCUACUGCCCAUUAGAUGGAA",

@@ -64,6 +64,7 @@ h6 {
 :root {
   --green: #008500;
   --pink: #850085;
+  --purple: #5c2ba8;
   --white: #fcfcfc;
   --black: #111111;
   /* RGB tuple for black to use in rgba() */
@@ -116,7 +117,7 @@ h6 {
   position: relative;
 
   font-family: "IBM Plex Serif", "Times New Roman", serif;
-  font-size: clamp(22px, calc(15.662px + 1.69014vw), 40px);
+  font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
   font-weight: 500;
   line-height: 1.2;
   color: var(--black);
@@ -149,10 +150,49 @@ h6 {
   user-select: none;
 }
 
+[data-rna-box] {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+[data-rna-fragment="core"] {
+  color: var(--purple);
+}
+
+[data-rna-fragment="filler"] {
+  color: var(--green);
+  opacity: 0.85;
+}
+
+[data-rna-midpoint] {
+  position: relative;
+  color: inherit;
+  font-weight: 600;
+}
+
+[data-rna-midpoint]::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.3em;
+  width: 1px;
+  height: 0.6em;
+  background: currentColor;
+  transform: translateX(-50%);
+  opacity: 0.8;
+}
+
 [data-rna-sequence] {
   display: block;
   width: 100%;
   min-height: 1.25em;
+}
+
+.js [data-rna-sequence]:not([data-rna-ready="true"]) {
+  visibility: hidden;
 }
 
 [data-rna-sequence-track] {
@@ -161,13 +201,21 @@ h6 {
   gap: 0;
   will-change: transform;
   white-space: nowrap;
-  transform: translateX(0);
+  transform: translateX(calc(-2 * var(--rna-distance, 0px)));
+  animation-name: rna-scroll-enter, rna-scroll-right;
+  animation-timing-function: linear, linear;
+  animation-iteration-count: 1, infinite;
+  animation-duration: var(--rna-duration, 30s), var(--rna-duration, 30s);
+  animation-delay: 0s, var(--rna-duration, 30s);
+  animation-fill-mode: forwards, none;
+  animation-play-state: paused;
 }
 
 [data-rna-sequence-segment] {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 [data-rna-sequence-item] {
@@ -196,6 +244,24 @@ h6 {
 [data-rna-separator]::before {
   content: attr(data-separator-text);
   opacity: 0.6;
+}
+
+@keyframes rna-scroll-enter {
+  from {
+    transform: translateX(calc(-2 * var(--rna-distance, 0px)));
+  }
+  to {
+    transform: translateX(calc(-1 * var(--rna-distance, 0px)));
+  }
+}
+
+@keyframes rna-scroll-right {
+  from {
+    transform: translateX(calc(-1 * var(--rna-distance, 0px)));
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
 .lrfa {
