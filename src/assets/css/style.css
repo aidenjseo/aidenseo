@@ -64,7 +64,6 @@ h6 {
 :root {
   --green: #008500;
   --pink: #850085;
-  --purple: #5c2ba8;
   --white: #fcfcfc;
   --black: #111111;
   /* RGB tuple for black to use in rgba() */
@@ -159,7 +158,7 @@ h6 {
 }
 
 [data-rna-fragment="core"] {
-  color: var(--purple);
+  color: var(--pink);
 }
 
 [data-rna-fragment="filler"] {
