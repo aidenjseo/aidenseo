@@ -7,7 +7,7 @@ loadRnaScripts: true
 <section class="brand-hero" aria-label="brand">
   <div class="brand-copy">
     <p class="main-line">
-      <span data-rna-root>i am a korean american</span>
+      <span data-rna-root>i am a korean american </span>
       <span data-rna-phrase></span>
     </p>
     <p class="rna-sequence">
