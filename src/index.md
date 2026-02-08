@@ -1,17 +1,17 @@
 ---
 title: Aiden Seo
 layout: base.njk
-loadRnaScripts: true
+loadDnaScripts: true
 ---
 
 <section class="brand-hero" aria-label="brand">
-  <div class="brand-copy">
-    <p class="main-line">
-      <span data-rna-root>i am a korean american</span>
-      <span data-rna-phrase>computational biology @ cu anschutz</span>
-    </p>
-    <div class="rna-sequence">
-      <span>UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA</span>
+  <div class="dna-hero">
+    <div class="dna-canvas-wrap">
+      <canvas id="dna-canvas"></canvas>
+    </div>
+    <div class="dna-text-overlay">
+      <p class="dna-root" data-dna-root>i am a korean american</p>
+      <p class="dna-phrase" data-dna-phrase></p>
     </div>
   </div>
   <p class="lrfa">leave room for air</p>

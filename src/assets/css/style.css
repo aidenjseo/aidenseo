@@ -12,6 +12,7 @@
   }
 }
 body {
+  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -102,7 +103,82 @@ h6 {
   --brand-copy-margin-bottom: 0;
 }
 
-/* Main Line on Home Page */
+/* ── DNA Transcription Hero ── */
+.dna-hero {
+  position: relative;
+  width: calc(100% + 2 * var(--page-pad));
+  margin-left: calc(-1 * var(--page-pad));
+  height: clamp(140px, 22vh, 260px);
+  z-index: 6;
+  top: clamp(-8rem, calc(-1.9155rem - 6.7606vw), -3.5rem);
+}
+
+.dna-canvas-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.dna-canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.dna-text-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dna-root {
+  font-family: "Crimson Text", "IBM Plex Serif", serif;
+  font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--black);
+  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+    2px 4px 4px rgba(var(--black-rgb), 0.1);
+}
+
+.dna-phrase {
+  font-family: "Crimson Text", "IBM Plex Serif", serif;
+  font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--black);
+  min-height: 1.4em;
+  white-space: pre-wrap;
+  transition: opacity 0.6s ease;
+  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+    2px 4px 4px rgba(var(--black-rgb), 0.1);
+}
+
+.dna-letter-in {
+  display: inline;
+  animation: dna-letter-pop 0.3s ease-out both;
+}
+
+@keyframes dna-letter-pop {
+  0% {
+    opacity: 0;
+    transform: translateY(6px) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* Legacy classes kept for other pages */
 .brand-copy {
   position: relative;
   top: clamp(-8rem, calc(-1.9155rem - 6.7606vw), -3.5rem);
@@ -118,87 +194,29 @@ h6 {
 
 .main-line {
   position: relative;
-
-  font-family: "IBM Plex Serif", "Times New Roman", serif;
+  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
   font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.2;
   color: var(--black);
   z-index: 6;
   word-spacing: 0.02em;
   letter-spacing: 0em;
-  max-width: 90vw; /* lets it wrap when the viewport is actually too small */
+  max-width: 90vw;
   margin-top: var(--main-line-margin-top, 0);
   margin-bottom: var(--main-line-margin-bottom, 0);
-  margin-inline: auto; /* keep narrower blocks centered */
+  margin-inline: auto;
   text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
     2px 4px 4px rgba(var(--black-rgb), 0.1);
-}
-
-.rna-sequence {
-  align-self: stretch;
-  margin: -0.5rem 0 0;
-  display: block;
-  width: calc(100% + 2 * var(--page-pad));
-  max-width: none;
-  margin-left: calc(-1 * var(--page-pad));
-  font-family: "IBM Plex Mono", "IBM Plex Sans", monospace;
-  font-size: clamp(10px, calc(7.8873px + 0.56338vw), 16px);
-  position: relative;
-  overflow: hidden;
-  min-height: 1.25em;
-  text-align: left;
-  color: var(--pink);
-  letter-spacing: -0.05em;
-  opacity: 0.5;
-  filter: blur(clamp(0.7px, calc(0.4535px + 0.06573vw), 1.4px));
-  user-select: none;
-  perspective: 1000px; /* Essential for 3D */
-}
-
-[data-rna-sequence] {
-  display: block;
-  width: 100%;
-  min-height: 1.25em;
-  position: relative;
-  overflow: hidden;
-}
-
-.js [data-rna-sequence]:not([data-rna-ready="true"]) {
-  visibility: hidden;
-}
-
-.rna-sequence-line {
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  white-space: nowrap;
-  will-change: transform;
-  transform-style: preserve-3d;
-}
-
-.rna-fillers {
-  color: var(--green);
-  opacity: 1.0;
-  display: inline-block;
-}
-
-.rna-split-char {
-  display: inline-block;
-  will-change: transform, opacity, filter;
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
 }
 
 .lrfa {
   position: absolute;
   bottom: clamp(6rem, calc(2.831rem + 13.521vw), 15rem);
   right: clamp(3.5rem, calc(-4.411rem + 33.756vw), 26rem);
-  font-family: "IBM Plex Serif", "Times New Roman", serif;
+  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
   font-size: clamp(16px, calc(14.59px + 0.3756vw), 20px);
-  font-weight: 500;
+  font-weight: 400;
   color: var(--pink);
   font-style: italic;
   z-index: 6;
@@ -239,8 +257,8 @@ h6 {
 }
 
 .big-logo {
-  font-family: "IBM Plex Sans", system-ui, sans-serif;
-  font-weight: 800;
+  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
+  font-weight: 700;
   letter-spacing: -0.02em;
   text-transform: lowercase;
   margin: 0;
@@ -267,7 +285,7 @@ h6 {
 }
 
 .big-logo-kr {
-  font-family: "IBM Plex Sans KR", "IBM Plex Sans", system-ui, sans-serif;
+  font-family: "Crimson Text", "IBM Plex Sans KR", Georgia, serif;
   font-weight: 400; /* regular instead of bold */
   letter-spacing: -0.02em;
   margin: 0;
@@ -295,7 +313,7 @@ h6 {
   padding: 0;
   background-color: transparent;
   color: var(--black);
-  font-family: "IBM Plex Sans Condensed", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
   font-size: var(--nav-font-size);
   line-height: 1;
 }
