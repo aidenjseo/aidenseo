@@ -260,6 +260,9 @@ function initDNA() {
   let revealedCount = 0;      // number of letters currently shown
   let phase = "idle";         // "scrolling" | "decelerating" | "waiting" | "idle"
   let waitTimer = 0;          // ms remaining in wait phases
+  let stopCodonLocked = false;
+  let lockedStopCodonPosition = null;
+  let phraseAnchors = new Map(); // seqIdx → { codonBase, codonBaseOffset }
 
   function seqEntry(idx) {
     const len = sequences.length;
@@ -291,10 +294,13 @@ function initDNA() {
     baseVelocity = totalBeadDistance / totalTime;
 
     // Track where this phrase's codons start in scroll-space
-    codonBase = Math.round(helix.offset / helix.beadSpacing);
+    codonBase = Math.floor(helix.offset / helix.beadSpacing);
     codonBaseOffset = helix.offset;
+    phraseAnchors.set(idx, { codonBase, codonBaseOffset });
     revealedCount = 0;
     phase = "scrolling";
+    stopCodonLocked = false;
+    lockedStopCodonPosition = null;
   }
 
   function restorePreviousSequence() {
@@ -316,13 +322,22 @@ function initDNA() {
     const totalTime = (numCodons + 1) * CODON_INTERVAL;
     baseVelocity = totalBeadDistance / totalTime;
 
-    // Position codonBaseOffset so current scroll maps into this phrase's range
-    // The phrase spans (phrase.length * 3) beads, plus 3 for the stop codon gap
-    const phraseBeadSpan = (currentPhrase.length + 1) * 3;
-    codonBaseOffset = helix.offset - phraseBeadSpan * helix.beadSpacing;
-    codonBase = Math.round(codonBaseOffset / helix.beadSpacing);
+    // Restore the exact anchor from when this phrase originally started
+    // so the stop codon highlights the same beads as before
+    const anchor = phraseAnchors.get(currentSeqIdx);
+    if (anchor) {
+      codonBase = anchor.codonBase;
+      codonBaseOffset = anchor.codonBaseOffset;
+    } else {
+      // Fallback: estimate from current position
+      const phraseBeadSpan = (currentPhrase.length + 1) * 3;
+      codonBaseOffset = helix.offset - phraseBeadSpan * helix.beadSpacing;
+      codonBase = Math.floor(codonBaseOffset / helix.beadSpacing);
+    }
     revealedCount = 0;
     phase = "scrolling";
+    stopCodonLocked = false;
+    lockedStopCodonPosition = null;
   }
 
   function revealLetter(idx) {
@@ -390,19 +405,37 @@ function initDNA() {
 
       const targetLetters = Math.max(0, Math.min(currentPhrase.length, Math.floor(beadProgress / 3)));
 
-      syncText(targetLetters);
-
-      // Stop codon zone: show red highlight when scrolled past all letters
       const stopCodonBead = currentPhrase.length * 3;
+
       if (beadProgress >= stopCodonBead) {
-        helix.activeBeadStart = codonBase + stopCodonBead;
+        // In the stop codon zone
+        if (!stopCodonLocked) {
+          lockedStopCodonPosition = codonBase + stopCodonBead;
+          stopCodonLocked = true;
+        }
+        syncText(currentPhrase.length);
+        helix.activeBeadStart = lockedStopCodonPosition;
         helix.isStopCodon = true;
+      } else if (stopCodonLocked && beadProgress >= stopCodonBead - 3) {
+        // Dragged back slightly — keep stop codon visible (1-codon buffer)
+        syncText(currentPhrase.length);
+        helix.activeBeadStart = lockedStopCodonPosition;
+        helix.isStopCodon = true;
+      } else {
+        // Normal letter scrolling, or dragged back past the buffer
+        if (stopCodonLocked) {
+          stopCodonLocked = false;
+          lockedStopCodonPosition = null;
+        }
+        syncText(targetLetters);
       }
 
       // Advance to next phrase only well past the stop codon
       if (beadProgress >= stopCodonBead + 6) {
         if (drag.dragging) {
           helix.clearHighlight();
+          stopCodonLocked = false;
+          lockedStopCodonPosition = null;
           currentSeqIdx++;
           startSequence(currentSeqIdx);
         } else {
@@ -424,15 +457,19 @@ function initDNA() {
         waitTimer = 800;
       } else if (phase === "waiting" && waitTimer <= 0) {
         helix.clearHighlight();
+        stopCodonLocked = false;
+        lockedStopCodonPosition = null;
         baseVelocity = 0;
         currentSeqIdx++;
         startSequence(currentSeqIdx);
       }
 
       // Keep stop codon highlight fixed every frame
-      const stopCodonBead = currentPhrase.length * 3;
-      helix.activeBeadStart = codonBase + stopCodonBead;
-      helix.isStopCodon = true;
+      // Use the locked position instead of recalculating
+      if (stopCodonLocked && lockedStopCodonPosition !== null) {
+        helix.activeBeadStart = lockedStopCodonPosition;
+        helix.isStopCodon = true;
+      }
     }
 
     helix.draw();
