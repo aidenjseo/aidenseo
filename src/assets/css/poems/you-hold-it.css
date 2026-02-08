@@ -1,0 +1,19 @@
+.poem-you-hold-it .poem-header,
+.poem-you-hold-it .poem-body {
+  margin-inline: 0;
+  max-width: 3in;
+}
+
+.poem-you-hold-it .poem-header {
+  display: block;
+}
+
+.poem-you-hold-it .poem-body {
+  display: inline-block;
+  margin-inline-start: 0.5in;
+  font-size: 20px;
+}
+
+.poem-you-hold-it .poem-body p + p {
+  margin-top: 1em;
+}

@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Ink Bleed (Calligraphy Paper)</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: #111;
+      }
+      .wrap {
+        height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      .stage {
+        width: min(1100px, 95vw);
+        aspect-ratio: 16 / 10;
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        background: #f5f0e6;
+      }
+
+      /* paper texture layers */
+      .stage::before {
+        content: "";
+        position: absolute;
+        inset: -20%;
+        background:
+          radial-gradient(
+            80% 60% at 20% 20%,
+            rgba(120, 90, 60, 0.08),
+            transparent 60%
+          ),
+          radial-gradient(
+            70% 55% at 80% 30%,
+            rgba(120, 90, 60, 0.06),
+            transparent 60%
+          ),
+          radial-gradient(
+            60% 70% at 30% 80%,
+            rgba(120, 90, 60, 0.05),
+            transparent 60%
+          ),
+          repeating-linear-gradient(
+            90deg,
+            rgba(60, 45, 30, 0.03) 0px,
+            rgba(60, 45, 30, 0.03) 1px,
+            transparent 2px,
+            transparent 7px
+          );
+        mix-blend-mode: multiply;
+        opacity: 0.65;
+        pointer-events: none;
+        transform: rotate(-1deg);
+        filter: blur(0.25px);
+      }
+      .stage::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-radial-gradient(
+          circle at 30% 40%,
+          rgba(0, 0, 0, 0.03) 0 1px,
+          transparent 1px 3px
+        );
+        opacity: 0.22;
+        mix-blend-mode: multiply;
+        pointer-events: none;
+      }
+
+      canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+
+      /* bleed layer: blur + svg displacement */
+      #bleed {
+        filter: url(#bleedDisplace) blur(6px);
+        opacity: 0.9;
+        mix-blend-mode: multiply;
+      }
+      #ink {
+        mix-blend-mode: multiply;
+      }
+
+      .ui {
+        position: absolute;
+        left: 12px;
+        bottom: 12px;
+        display: flex;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(8px);
+        font:
+          12px/1.2 system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          sans-serif;
+        color: #20180f;
+        align-items: center;
+      }
+      .ui label {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .ui input[type="range"] {
+        width: 140px;
+      }
+      .ui button {
+        border: 0;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: #20180f;
+        color: #f5f0e6;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="stage" id="stage">
+        <!-- SVG filter used by the bleed canvas -->
+        <svg width="0" height="0" style="position: absolute">
+          <filter id="bleedDisplace">
+            <!-- “paper fiber” noise -->
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012"
+              numOctaves="2"
+              seed="7"
+              result="noise"
+            />
+            <!-- push pixels around to make edges look like they soak into fibers -->
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="18"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </svg>
+
+        <canvas id="bleed"></canvas>
+        <canvas id="ink"></canvas>
+
+        <div class="ui">
+          <label
+            >Brush <input id="brush" type="range" min="2" max="40" value="16"
+          /></label>
+          <label
+            >Wet
+            <input
+              id="wet"
+              type="range"
+              min="0"
+              max="1"
+              step="0.01"
+              value="0.55"
+          /></label>
+          <label
+            >Ink
+            <input
+              id="inkload"
+              type="range"
+              min="0.02"
+              max="0.25"
+              step="0.01"
+              value="0.10"
+          /></label>
+          <button id="clear">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (() => {
+        const stage = document.getElementById("stage");
+        const inkC = document.getElementById("ink");
+        const bleedC = document.getElementById("bleed");
+        const brushEl = document.getElementById("brush");
+        const wetEl = document.getElementById("wet");
+        const inkEl = document.getElementById("inkload");
+        const clearBtn = document.getElementById("clear");
+
+        const ink = inkC.getContext("2d", { alpha: true });
+        const bleed = bleedC.getContext("2d", { alpha: true });
+
+        function resize() {
+          const r = stage.getBoundingClientRect();
+          const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+          for (const c of [inkC, bleedC]) {
+            c.width = Math.round(r.width * dpr);
+            c.height = Math.round(r.height * dpr);
+            c.style.width = r.width + "px";
+            c.style.height = r.height + "px";
+            const ctx = c.getContext("2d");
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          }
+          // keep drawings (optional: you could snapshot/restore; skipping for simplicity)
+        }
+        window.addEventListener("resize", resize);
+        resize();
+
+        function clearAll() {
+          ink.clearRect(0, 0, inkC.width, inkC.height);
+          bleed.clearRect(0, 0, bleedC.width, bleedC.height);
+        }
+        clearBtn.addEventListener("click", clearAll);
+
+        let drawing = false;
+        let last = null;
+
+        function pos(e) {
+          const r = stage.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          const y = e.clientY - r.top;
+          return { x, y };
+        }
+
+        function stamp(ctx, x, y, radius, alpha) {
+          // jitter = makes it look like fibers and uneven ink deposit
+          const j = radius * 0.25;
+          const dx = (Math.random() - 0.5) * j;
+          const dy = (Math.random() - 0.5) * j;
+          ctx.beginPath();
+          ctx.arc(
+            x + dx,
+            y + dy,
+            radius * (0.75 + Math.random() * 0.5),
+            0,
+            Math.PI * 2,
+          );
+          ctx.fillStyle = `rgba(20, 14, 10, ${alpha})`;
+          ctx.fill();
+        }
+
+        function drawSegment(a, b) {
+          const brush = +brushEl.value;
+          const wet = +wetEl.value; // 0..1
+          const inkload = +inkEl.value; // controls darkness per stamp
+
+          const dx = b.x - a.x,
+            dy = b.y - a.y;
+          const dist = Math.hypot(dx, dy);
+          const steps = Math.max(1, Math.ceil(dist / 2));
+
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const x = a.x + dx * t;
+            const y = a.y + dy * t;
+
+            // sharp core (less spread)
+            stamp(ink, x, y, brush * 0.42, inkload);
+
+            // bleed halo (bigger + lighter). Wetness increases radius + alpha slightly.
+            const bleedR = brush * (0.7 + wet * 0.9);
+            const bleedA = inkload * (0.35 + wet * 0.55);
+            stamp(bleed, x, y, bleedR, bleedA);
+          }
+        }
+
+        function down(e) {
+          drawing = true;
+          last = pos(e);
+          e.preventDefault();
+        }
+        function move(e) {
+          if (!drawing) return;
+          const p = pos(e);
+          drawSegment(last, p);
+          last = p;
+          e.preventDefault();
+        }
+        function up() {
+          drawing = false;
+          last = null;
+        }
+
+        stage.addEventListener("pointerdown", down);
+        stage.addEventListener("pointermove", move);
+        window.addEventListener("pointerup", up);
+      })();
+    </script>
+  </body>
+</html>

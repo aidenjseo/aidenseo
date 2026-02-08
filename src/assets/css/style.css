@@ -12,9 +12,14 @@
   }
 }
 body {
-  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
+  font-family: "Crimson Text", Georgia, serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  background-color: #faf9f6;
+}
+
+html {
+  overscroll-behavior: none;
 }
 
 html,
@@ -63,12 +68,15 @@ h6 {
 }
 
 :root {
-  --green: #008500;
-  --pink: #850085;
+  --green: #556b2f;
+  --pink: #d68a9c;
   --white: #fcfcfc;
-  --black: #111111;
+  --black: #1d1f1a;
+  --pink-rgb: 214, 138, 156;
+  --black-rgb: 29, 31, 26;
+  --green-rgb: 85, 107, 47;
   /* RGB tuple for black to use in rgba() */
-  --black-rgb: 17, 17, 17;
+  --black-rgb: 29, 31, 26;
   --page-pad: clamp(1rem, calc(0.824rem + 0.7512vw), 1.5rem);
   --nav-top-offset: -0.25rem;
   --nav-font-size: clamp(16px, calc(12.7px + 0.884vw), 24px);
@@ -101,6 +109,7 @@ h6 {
   --main-line-margin-top: 0;
   --main-line-margin-bottom: 0;
   --brand-copy-margin-bottom: 0;
+  --dna-optical-tighten: 0.12em;
 }
 
 /* ── DNA Transcription Hero ── */
@@ -133,32 +142,47 @@ h6 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
+  gap: 0rem;
   pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   z-index: 2;
 }
 
 .dna-root {
-  font-family: "Crimson Text", "IBM Plex Serif", serif;
+  font-family: "Crimson Text", Georgia, serif;
   font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
-  font-weight: 600;
-  line-height: 1.2;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
   color: var(--black);
-  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+  text-shadow:
+    1px 2px 2px rgba(var(--black-rgb), 0.06),
     2px 4px 4px rgba(var(--black-rgb), 0.1);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .dna-phrase {
-  font-family: "Crimson Text", "IBM Plex Serif", serif;
+  font-family: "Crimson Text", Georgia, serif;
   font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
-  font-weight: 700;
-  line-height: 1.2;
+  font-weight: 400;
+  line-height: 1;
+  margin: 0;
+  transform: translateY(calc(-1 * var(--dna-optical-tighten)));
   color: var(--black);
-  min-height: 1.4em;
   white-space: pre-wrap;
   transition: opacity 0.6s ease;
-  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+  text-shadow:
+    1px 2px 2px rgba(var(--black-rgb), 0.06),
     2px 4px 4px rgba(var(--black-rgb), 0.1);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.dna-phrase:empty::before {
+  content: "\00a0";
 }
 
 .dna-letter-in {
@@ -177,8 +201,6 @@ h6 {
   }
 }
 
-
-/* Legacy classes kept for other pages */
 .brand-copy {
   position: relative;
   top: clamp(-8rem, calc(-1.9155rem - 6.7606vw), -3.5rem);
@@ -194,7 +216,7 @@ h6 {
 
 .main-line {
   position: relative;
-  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
+  font-family: "Crimson Text", Georgia, serif;
   font-size: clamp(20px, calc(12.958px + 1.87793vw), 40px);
   font-weight: 600;
   line-height: 1.2;
@@ -206,20 +228,37 @@ h6 {
   margin-top: var(--main-line-margin-top, 0);
   margin-bottom: var(--main-line-margin-bottom, 0);
   margin-inline: auto;
-  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
+  text-shadow:
+    1px 2px 2px rgba(var(--black-rgb), 0.06),
     2px 4px 4px rgba(var(--black-rgb), 0.1);
 }
 
-.lrfa {
+.uhi {
   position: absolute;
   bottom: clamp(6rem, calc(2.831rem + 13.521vw), 15rem);
   right: clamp(3.5rem, calc(-4.411rem + 33.756vw), 26rem);
-  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
+  font-family: "Crimson Text", Georgia, serif;
   font-size: clamp(16px, calc(14.59px + 0.3756vw), 20px);
-  font-weight: 400;
+  font-weight: 600;
   color: var(--pink);
   font-style: italic;
+  text-decoration: none;
+  opacity: 0.6;
+  text-shadow: none;
+  transition: opacity 150ms ease;
+  user-select: none;
+  -webkit-user-select: none;
   z-index: 6;
+}
+
+.uhi:hover,
+.uhi:focus-visible {
+  opacity: 1;
+  text-shadow:
+    /* Layer 1: Tight definition (16-20px text) */
+    0px 0.5px 1px rgba(var(--pink-rgb), 0.22),
+    /* Layer 2: Soft bloom */ 0px 1.5px 3px rgba(var(--pink-rgb), 0.14),
+    /* Layer 3: Ambient grounding */ 0px 3px 6px rgba(var(--pink-rgb), 0.1);
 }
 
 /* Brand Hero: layer EN (right) over KR (left) on same line */
@@ -250,29 +289,31 @@ h6 {
   left: 0;
   z-index: 1;
   bottom: clamp(
-    var(--brand-hero-bottom-nudge, 0),
-    calc(var(--brand-hero-bottom-nudge, 0) + 1.4815vw - 0.8333rem),
-    calc(var(--brand-hero-bottom-nudge, 0) + 0.5rem)
+    calc(var(--brand-hero-bottom-nudge, 0) + 1.75rem),
+    calc(var(--brand-hero-bottom-nudge, 0) + 1.4815vw - 0.0833rem),
+    calc(var(--brand-hero-bottom-nudge, 0) + 1.25rem)
   );
 }
 
 .big-logo {
-  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: "Crimson Text", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   text-transform: lowercase;
   margin: 0;
   text-align: right;
   white-space: nowrap;
   font-size: clamp(76px, calc(12.62px + 0.16901 * 100vw), 256px);
   color: var(--green);
-  opacity: 0.8;
-  visibility: visible; /* we’re not doing entrance animation yet */
+  opacity: 0.95;
   line-height: 0.8;
-  text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
-    2px 4px 4px rgba(var(--black-rgb), 0.1),
-    4px 8px 8px rgba(var(--black-rgb), 0.14),
-    8px 16px 16px rgba(var(--black-rgb), 0.18);
+  text-shadow:
+    /* Layer 1: Tight definition (The Ink Edge) */
+    0px 1px 2px rgba(var(--green-rgb), 0.2),
+    /* Layer 2: Soft Bloom (The Light passing through) */ 0px 4px 8px
+      rgba(var(--green-rgb), 0.15),
+    /* Layer 3: Ambient Grounding (Subtle depth) */ 0px 8px 16px
+      rgba(var(--green-rgb), 0.1);
 }
 
 .brand-logo-kr {
@@ -285,7 +326,7 @@ h6 {
 }
 
 .big-logo-kr {
-  font-family: "Crimson Text", "IBM Plex Sans KR", Georgia, serif;
+  font-family: "Noto Serif KR", "Crimson Text", Georgia, serif;
   font-weight: 400; /* regular instead of bold */
   letter-spacing: -0.02em;
   margin: 0;
@@ -295,8 +336,9 @@ h6 {
   line-height: 0.8;
 
   color: var(--pink);
-  opacity: 0.25;
-  filter: blur(4px);
+  opacity: 0.5;
+  filter: blur(2px);
+  mix-blend-mode: multiply;
 }
 
 /* Navigation Styles */
@@ -313,7 +355,7 @@ h6 {
   padding: 0;
   background-color: transparent;
   color: var(--black);
-  font-family: "Crimson Text", "IBM Plex Serif", Georgia, serif;
+  font-family: "Crimson Text", Georgia, serif;
   font-size: var(--nav-font-size);
   line-height: 1;
 }
@@ -342,7 +384,12 @@ h6 {
 
 .brand:hover,
 .brand:focus-visible {
-  color: var(--green);
+  color: var(--black);
+  text-shadow:
+    /* Layer 1: Tight definition (small text calibration) */
+    0px 0.5px 1px rgba(var(--black-rgb), 0.18),
+    /* Layer 2: Soft bloom */ 0px 2px 4px rgba(var(--black-rgb), 0.12),
+    /* Layer 3: Ambient grounding */ 0px 4px 8px rgba(var(--black-rgb), 0.08);
 }
 
 .main-links {
@@ -371,7 +418,12 @@ h6 {
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: var(--green);
+  color: var(--black);
+  text-shadow:
+    /* Layer 1: Tight definition (small text calibration) */
+    0px 0.5px 1px rgba(var(--black-rgb), 0.18),
+    /* Layer 2: Soft bloom */ 0px 2px 4px rgba(var(--black-rgb), 0.12),
+    /* Layer 3: Ambient grounding */ 0px 4px 8px rgba(var(--black-rgb), 0.08);
 }
 
 @media (max-width: 720px) {
