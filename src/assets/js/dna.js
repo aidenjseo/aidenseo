@@ -407,16 +407,16 @@ function initDNA() {
 
       const stopCodonBead = currentPhrase.length * 3;
 
-      if (beadProgress >= stopCodonBead) {
-        // In the stop codon zone
+      if (beadProgress >= stopCodonBead + 3) {
+        // In the stop codon zone (3 beads after last letter)
         if (!stopCodonLocked) {
-          lockedStopCodonPosition = codonBase + stopCodonBead;
+          lockedStopCodonPosition = codonBase + stopCodonBead + 3;
           stopCodonLocked = true;
         }
         syncText(currentPhrase.length);
         helix.activeBeadStart = lockedStopCodonPosition;
         helix.isStopCodon = true;
-      } else if (stopCodonLocked && beadProgress >= stopCodonBead - 3) {
+      } else if (stopCodonLocked && beadProgress >= stopCodonBead) {
         // Dragged back slightly — keep stop codon visible (1-codon buffer)
         syncText(currentPhrase.length);
         helix.activeBeadStart = lockedStopCodonPosition;
@@ -454,7 +454,7 @@ function initDNA() {
       if (phase === "decelerating" && waitTimer <= 0) {
         if (phraseEl) phraseEl.style.opacity = "0";
         phase = "waiting";
-        waitTimer = 800;
+        waitTimer = 500;
       } else if (phase === "waiting" && waitTimer <= 0) {
         helix.clearHighlight();
         stopCodonLocked = false;
