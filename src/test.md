@@ -2,16 +2,23 @@
 title: Aiden Seo
 layout: base.njk
 loadRnaScripts: true
+templateEngineOverride: njk
 ---
 
 <section class="brand-hero" aria-label="brand">
   <div class="brand-copy">
     <p class="main-line">
-      <span data-rna-root>i am a korean american</span>
-      <span data-rna-phrase>computational biology @ cu anschutz</span>
+      <span data-rna-root>i am a korean american </span>
+      <span data-rna-phrase></span>
     </p>
     <div class="rna-sequence">
-      <span>UGUUAGAUGCCUAAUAUUUAGCGUGAAUCUGAAGCUCGUUGUCAUGAACGUGCCUGUUGAGCUAAUUCUUGUCAUUGAACUGAA</span>
+      <span class="trans" data-rna-sequence data-rna-speed="1.5">
+        {% if rnaSequences %}
+          {%- for entry in rnaSequences %}
+            <span class="rna-sequence-line">{{ entry.sequence | trim }}</span>
+          {%- endfor %}
+        {% endif %}
+      </span>
     </div>
   </div>
   <p class="lrfa">leave room for air</p>

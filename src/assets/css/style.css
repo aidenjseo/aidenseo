@@ -97,6 +97,9 @@ h6 {
   --space-256: 256rem;
   /* Vertical nudge for brand-hero logos from the bottom */
   --brand-hero-bottom-nudge: 2.25rem;
+  --main-line-margin-top: 0;
+  --main-line-margin-bottom: 0;
+  --brand-copy-margin-bottom: 0;
 }
 
 /* Main Line on Home Page */
@@ -110,6 +113,7 @@ h6 {
   text-align: center;
   width: 100%;
   max-width: 100%;
+  margin-bottom: var(--brand-copy-margin-bottom, 0);
 }
 
 .main-line {
@@ -124,6 +128,8 @@ h6 {
   word-spacing: 0.02em;
   letter-spacing: 0em;
   max-width: 90vw; /* lets it wrap when the viewport is actually too small */
+  margin-top: var(--main-line-margin-top, 0);
+  margin-bottom: var(--main-line-margin-bottom, 0);
   margin-inline: auto; /* keep narrower blocks centered */
   text-shadow: 1px 2px 2px rgba(var(--black-rgb), 0.06),
     2px 4px 4px rgba(var(--black-rgb), 0.1);
@@ -147,120 +153,43 @@ h6 {
   opacity: 0.5;
   filter: blur(clamp(0.7px, calc(0.4535px + 0.06573vw), 1.4px));
   user-select: none;
-}
-
-[data-rna-box] {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  margin-right: 0;
-  flex-shrink: 0;
-}
-
-[data-rna-fragment="core"] {
-  color: var(--pink);
-}
-
-[data-rna-fragment="filler"] {
-  color: var(--green);
-  opacity: 0.85;
-}
-
-[data-rna-midpoint] {
-  position: relative;
-  color: inherit;
-  font-weight: 600;
-}
-
-[data-rna-midpoint]::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -0.3em;
-  width: 1px;
-  height: 0.6em;
-  background: currentColor;
-  transform: translateX(-50%);
-  opacity: 0.8;
+  perspective: 1000px; /* Essential for 3D */
 }
 
 [data-rna-sequence] {
   display: block;
   width: 100%;
   min-height: 1.25em;
+  position: relative;
+  overflow: hidden;
 }
 
 .js [data-rna-sequence]:not([data-rna-ready="true"]) {
   visibility: hidden;
 }
 
-[data-rna-sequence-track] {
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
+.rna-sequence-line {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  white-space: nowrap;
   will-change: transform;
-  white-space: nowrap;
-  transform: translateX(calc(-2 * var(--rna-distance, 0px)));
-  animation-name: rna-scroll-enter, rna-scroll-right;
-  animation-timing-function: linear, linear;
-  animation-iteration-count: 1, infinite;
-  animation-duration: var(--rna-duration, 30s), var(--rna-duration, 30s);
-  animation-delay: 0s, var(--rna-duration, 30s);
-  animation-fill-mode: forwards, none;
-  animation-play-state: paused;
+  transform-style: preserve-3d;
 }
 
-[data-rna-sequence-segment] {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-[data-rna-sequence-item] {
-  --rna-item-gap-nudge: 0px;
-  white-space: nowrap;
-  letter-spacing: -0.05em;
-  margin-left: var(--rna-item-gap-nudge, 0px);
-}
-
-[data-rna-separator] {
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 0 0 auto;
-  width: var(--rna-separator-width, 2rem);
-  min-width: var(--rna-separator-width, 2rem);
-  white-space: nowrap;
-  pointer-events: none;
+.rna-fillers {
   color: var(--green);
-  font-family: "IBM Plex Mono", "IBM Plex Sans", monospace;
-  letter-spacing: -0.03em;
-  font-size: inherit;
-  overflow: visible;
+  opacity: 1.0;
+  display: inline-block;
 }
 
-[data-rna-separator]::before {
-  content: attr(data-separator-text);
-  opacity: 0.6;
-}
-
-@keyframes rna-scroll-enter {
-  from {
-    transform: translateX(calc(-2 * var(--rna-distance, 0px)));
-  }
-  to {
-    transform: translateX(calc(-1 * var(--rna-distance, 0px)));
-  }
-}
-
-@keyframes rna-scroll-right {
-  from {
-    transform: translateX(calc(-1 * var(--rna-distance, 0px)));
-  }
-  to {
-    transform: translateX(0);
-  }
+.rna-split-char {
+  display: inline-block;
+  will-change: transform, opacity, filter;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .lrfa {
