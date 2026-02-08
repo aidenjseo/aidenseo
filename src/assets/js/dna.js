@@ -5,6 +5,7 @@
  */
 
 const COMPLEMENT = { A: "U", U: "A", G: "C", C: "G" };
+const TWO_PI = Math.PI * 2;
 
 const COLOR = {
   activeFront: "rgba(214, 138, 156, 0.95)",
@@ -78,6 +79,9 @@ class HelixRenderer {
     ctx.clearRect(0, 0, this.width, this.height);
     if (!this.sequence) return;
 
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
     const seqLen = this.sequence.length;
     const halfW = this.width / 2;
     const items = [];
@@ -140,7 +144,7 @@ class HelixRenderer {
     const r = (item.active ? this.beadRadius * 1.3 : this.beadRadius) * depthScale;
 
     ctx.beginPath();
-    ctx.arc(item.x, item.y, r, 0, Math.PI * 2);
+    ctx.arc(item.x, item.y, r, 0, TWO_PI);
 
     if (item.active) {
       if (stopMode) {
@@ -153,7 +157,6 @@ class HelixRenderer {
     } else {
       ctx.fillStyle = isFront ? COLOR.beadFront : COLOR.beadBack;
       ctx.shadowColor = "transparent";
-      ctx.shadowBlur = 0;
     }
     ctx.fill();
     ctx.shadowBlur = 0;
@@ -161,8 +164,6 @@ class HelixRenderer {
     if (isFront && r > 3.5) {
       ctx.fillStyle = item.active ? "#fff" : "rgba(255,255,255,0.75)";
       ctx.font = `${item.active ? "bold " : ""}${Math.round(r * 1.3)}px ui-monospace, monospace`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
       ctx.fillText(item.nuc, item.x, item.y + 0.5);
     }
   }
@@ -269,16 +270,9 @@ function initDNA() {
     return sequences[((idx % len) + len) % len];
   }
 
-  function startSequence(idx) {
-    const entry = seqEntry(idx);
+  function setupPhrase(entry) {
     helix.setSequence(entry.sequence);
     helix.clearHighlight();
-
-    if (firstInit) {
-      helix.setInitialOffset(-8);
-      firstInit = false;
-    }
-
     currentPhrase = entry.phrase;
 
     if (rootEl) rootEl.textContent = entry.root;
@@ -287,57 +281,48 @@ function initDNA() {
       phraseEl.style.opacity = "1";
     }
 
-    // Calculate constant velocity: each char = 1 codon = 3 beads, +1 for stop codon
     const numCodons = currentPhrase.length;
     const totalBeadDistance = (numCodons + 1) * 3 * helix.beadSpacing;
     const totalTime = (numCodons + 1) * CODON_INTERVAL;
     baseVelocity = totalBeadDistance / totalTime;
 
-    // Track where this phrase's codons start in scroll-space
-    codonBase = Math.floor(helix.offset / helix.beadSpacing);
-    codonBaseOffset = helix.offset;
-    phraseAnchors.set(idx, { codonBase, codonBaseOffset });
     revealedCount = 0;
     phase = "scrolling";
     stopCodonLocked = false;
     lockedStopCodonPosition = null;
   }
 
-  function restorePreviousSequence() {
-    currentSeqIdx--;
-    const entry = seqEntry(currentSeqIdx);
-    helix.setSequence(entry.sequence);
-    helix.clearHighlight();
-    currentPhrase = entry.phrase;
+  function startSequence(idx) {
+    setupPhrase(seqEntry(idx));
 
-    if (rootEl) rootEl.textContent = entry.root;
-    if (phraseEl) {
-      phraseEl.innerHTML = "";
-      phraseEl.style.opacity = "1";
+    if (firstInit) {
+      helix.setInitialOffset(-8);
+      firstInit = false;
     }
 
-    // Recalculate velocity for this phrase
-    const numCodons = currentPhrase.length;
-    const totalBeadDistance = (numCodons + 1) * 3 * helix.beadSpacing;
-    const totalTime = (numCodons + 1) * CODON_INTERVAL;
-    baseVelocity = totalBeadDistance / totalTime;
+    codonBase = Math.floor(helix.offset / helix.beadSpacing);
+    codonBaseOffset = helix.offset;
+    phraseAnchors.set(idx, { codonBase, codonBaseOffset });
 
-    // Restore the exact anchor from when this phrase originally started
-    // so the stop codon highlights the same beads as before
+    if (phraseAnchors.size > 20) {
+      const oldest = phraseAnchors.keys().next().value;
+      phraseAnchors.delete(oldest);
+    }
+  }
+
+  function restorePreviousSequence() {
+    currentSeqIdx--;
+    setupPhrase(seqEntry(currentSeqIdx));
+
     const anchor = phraseAnchors.get(currentSeqIdx);
     if (anchor) {
       codonBase = anchor.codonBase;
       codonBaseOffset = anchor.codonBaseOffset;
     } else {
-      // Fallback: estimate from current position
       const phraseBeadSpan = (currentPhrase.length + 1) * 3;
       codonBaseOffset = helix.offset - phraseBeadSpan * helix.beadSpacing;
       codonBase = Math.floor(codonBaseOffset / helix.beadSpacing);
     }
-    revealedCount = 0;
-    phase = "scrolling";
-    stopCodonLocked = false;
-    lockedStopCodonPosition = null;
   }
 
   function revealLetter(idx) {

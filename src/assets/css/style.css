@@ -75,8 +75,8 @@ h6 {
   --pink-rgb: 214, 138, 156;
   --black-rgb: 29, 31, 26;
   --green-rgb: 85, 107, 47;
-  /* RGB tuple for black to use in rgba() */
   --black-rgb: 29, 31, 26;
+
   --page-pad: clamp(1rem, calc(0.824rem + 0.7512vw), 1.5rem);
   --nav-top-offset: -0.25rem;
   --nav-font-size: clamp(16px, calc(12.7px + 0.884vw), 24px);
