@@ -41,9 +41,7 @@
       {{ content | safe }}
     </main>
     {% if loadDnaScripts %}
-      <script id="rna-sequences-data" type="application/json">
-        {{ rnaSequences | dump | safe }}
-      </script>
+      <script src="/assets/js/dna-phrases.js"></script>
       <script src="/assets/js/dna.js" defer></script>
     {% endif %}
   </body>
