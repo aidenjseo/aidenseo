@@ -10,9 +10,18 @@
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400&display=swap" rel="stylesheet"/>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=block"/>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=block" rel="stylesheet"/>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400&display=block"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400&display=block" rel="stylesheet"/>
     <link rel="stylesheet" href="/assets/css/style.css"/>
+    {% if titleWidthOverride %}
+    <style>
+      :root {
+        --title-width-custom: {{ titleWidthOverride }}px;
+      }
+    </style>
+    {% endif %}
     {% if isPoem %}
       <link rel="stylesheet" href="/assets/css/poem-base.css"/>
     {% endif %}
@@ -25,6 +34,11 @@
       <nav class="site-nav" aria-label="Primary">
         <div class="nav-inner">
           <a class="brand" href="/">aidenseo</a>
+          {% if title and title != "Aiden Seo" %}
+          <div class="page-title-nav">
+            <span class="page-title-text">{{ title }}</span>
+          </div>
+          {% endif %}
           <div class="main-links">
             <a class="nav-link" href="/about/">about</a>
             <a class="nav-link" href="/works/">works</a>
@@ -37,9 +51,38 @@
         </div>
       </nav>
     </header>
+    {% if title and title != "Aiden Seo" %}
+    <div class="page-title-mobile">
+      <span class="page-title-text">{{ title }}</span>
+    </div>
+    {% endif %}
     <main class="wrap">
       {{ content | safe }}
     </main>
+    <script>
+      (function() {
+        var title = document.querySelector('.page-title-nav');
+        if (!title) return;
+
+        // Measure actual brand width and set CSS variable for alignment
+        var brand = document.querySelector('.brand');
+        function syncBrandWidth() {
+          if (brand) {
+            document.documentElement.style.setProperty(
+              '--nav-brand-width', brand.offsetWidth + 'px'
+            );
+          }
+        }
+        syncBrandWidth();
+        window.addEventListener('resize', syncBrandWidth);
+
+        // Fade out title on scroll
+        var threshold = 80;
+        window.addEventListener('scroll', function() {
+          title.classList.toggle('scrolled-away', window.scrollY > threshold);
+        }, { passive: true });
+      })();
+    </script>
     {% if loadDnaScripts %}
       <script src="/assets/js/dna-phrases.js"></script>
       <script src="/assets/js/dna.js" defer></script>

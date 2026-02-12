@@ -76,6 +76,23 @@ h6 {
   --black-rgb: 29, 31, 26;
   --green-rgb: 85, 107, 47;
   --black-rgb: 29, 31, 26;
+  /* Navigation grid dimensions */
+  --nav-brand-width: clamp(80px, 10vw, 150px);
+  --nav-title-column-width: clamp(0px, 40vw, 570px);
+
+  /* Title width estimates (configurable per-page) */
+  --title-width-short: 120px; /* < 10 characters */
+  --title-width-medium: 180px; /* 10-20 characters (default) */
+  --title-width-long: 240px; /* > 20 characters */
+
+  /* Active title width (defaults to medium, can be overridden via --title-width-custom) */
+  --title-width: var(--title-width-custom, var(--title-width-medium));
+
+  /* Universal content alignment calculation */
+  --content-align-left: calc(
+    var(--nav-brand-width) +
+      (var(--nav-title-column-width) - var(--title-width)) / 2
+  );
 
   --page-pad: clamp(1rem, calc(0.824rem + 0.7512vw), 1.5rem);
   --nav-top-offset: -0.25rem;
@@ -370,6 +387,17 @@ h6 {
   column-gap: 0;
 }
 
+/* 4-column layout when page title is present */
+/* Split the original first column (clamp(0px, 50vw, 720px)) between brand and title */
+.nav-inner:has(.page-title-nav) {
+  grid-template-columns:
+    max-content /* brand: natural text width */
+    clamp(0px, 40vw, 570px) /* title: fills rest of original space */
+    minmax(0, 1fr) /* main-links: same position as before */
+    max-content; /* contact-links: same as before */
+  column-gap: 0; /* keep no gap like original */
+}
+
 .brand {
   text-decoration: none;
   font-weight: 800;
@@ -384,12 +412,12 @@ h6 {
 
 .brand:hover,
 .brand:focus-visible {
-  color: var(--black);
+  color: var(--green);
   text-shadow:
     /* Layer 1: Tight definition (small text calibration) */
-    0px 0.5px 1px rgba(var(--black-rgb), 0.18),
-    /* Layer 2: Soft bloom */ 0px 2px 4px rgba(var(--black-rgb), 0.12),
-    /* Layer 3: Ambient grounding */ 0px 4px 8px rgba(var(--black-rgb), 0.08);
+    0px 0.5px 1px rgba(var(--green-rgb), 0.18),
+    /* Layer 2: Soft bloom */ 0px 2px 4px rgba(var(--green-rgb), 0.12),
+    /* Layer 3: Ambient grounding */ 0px 4px 8px rgba(var(--green-rgb), 0.08);
 }
 
 .main-links {
@@ -418,12 +446,68 @@ h6 {
 
 .nav-link:hover,
 .nav-link:focus-visible {
-  color: var(--black);
+  color: var(--green);
   text-shadow:
     /* Layer 1: Tight definition (small text calibration) */
     0px 0.5px 1px rgba(var(--black-rgb), 0.18),
-    /* Layer 2: Soft bloom */ 0px 2px 4px rgba(var(--black-rgb), 0.12),
-    /* Layer 3: Ambient grounding */ 0px 4px 8px rgba(var(--black-rgb), 0.08);
+    /* Layer 2: Soft bloom */ 0px 2px 4px rgba(var(--gree-rgb), 0.12),
+    /* Layer 3: Ambient grounding */ 0px 4px 8px rgba(var(--green-rgb), 0.08);
+}
+
+/* Page Title in Navigation */
+.page-title-nav {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 clamp(8px, 1vw, 16px);
+  transition: opacity 0.3s ease;
+}
+
+.page-title-nav.scrolled-away {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-title-text {
+  font-family: "Crimson Text", Georgia, serif;
+  font-size: clamp(28px, calc(27.3px + 0.19vw), 30px);
+  font-weight: 800;
+  font-style: normal;
+  letter-spacing: 0.04em;
+  color: var(--black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  transition: color 150ms ease;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Mobile-only title (in document flow, hidden on desktop) */
+.page-title-mobile {
+  display: none;
+}
+
+/* Universal content alignment - aligns with centered title's left edge */
+.content-title-aligned {
+  margin-left: var(--content-align-left);
+  margin-top: clamp(2rem, 4vh, 3.5rem);
+  max-width: calc(100vw - var(--content-align-left) - var(--page-pad));
+}
+
+@media (max-width: 1000px) {
+  .main-links {
+    transform: translateX(var(--nav-main-links-nudge-1000));
+  }
+
+  /* Disable nudge when title is present - grid handles positioning */
+  .nav-inner:has(.page-title-nav) .main-links {
+    transform: none;
+  }
 }
 
 @media (max-width: 720px) {
@@ -438,20 +522,58 @@ h6 {
   .contact-links {
     column-gap: 12px;
   }
+
+  /* Adjust grid for smaller screens while keeping main-links in same relative position */
+  .nav-inner:has(.page-title-nav) {
+    grid-template-columns:
+      minmax(60px, 10vw)
+      minmax(0, 40vw)
+      minmax(0, 1fr)
+      max-content;
+  }
 }
 
 @media (max-width: 450px) {
   .main-links {
     column-gap: 16px;
   }
+
   .contact-links {
     column-gap: 12px;
   }
-}
 
-@media (max-width: 1000px) {
-  .main-links {
-    transform: translateX(var(--nav-main-links-nudge-1000));
+  /* Hide title from nav grid */
+  .page-title-nav {
+    display: none;
+  }
+
+  /* Revert to 3-column grid */
+  .nav-inner:has(.page-title-nav),
+  .nav-inner {
+    grid-template-columns:
+      auto
+      minmax(0, 1fr)
+      max-content;
+    column-gap: 20px;
+  }
+
+  .brand {
+    margin-right: 20px;
+  }
+
+  /* Show mobile title in document flow */
+  .page-title-mobile {
+    display: block;
+    margin-top: calc(var(--nav-font-size) + 0rem);
+    margin-bottom: 0rem;
+  }
+
+  /* Content becomes full-width on mobile */
+  .content-title-aligned {
+    margin-left: 0;
+    padding-left: var(--page-pad);
+    padding-right: var(--page-pad);
+    max-width: 100%;
   }
 }
 

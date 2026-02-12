@@ -10,8 +10,8 @@
 
 .poem-you-hold-it .poem-body {
   display: inline-block;
-  margin-inline-start: 0.5in;
   font-size: 20px;
+  margin-inline-start: 0.5in;
 }
 
 .poem-you-hold-it .poem-body p + p {

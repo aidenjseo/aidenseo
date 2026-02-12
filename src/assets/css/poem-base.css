@@ -1,5 +1,6 @@
 .poem-page {
-  margin-left: clamp(0px, calc((100vw - 430px) * 280 / 1010), 280px);
+  margin-left: var(--content-align-left);
+  margin-top: clamp(2rem, 4vh, 3.5rem);
 }
 
 .poem-title {
@@ -15,5 +16,14 @@
 @media (max-width: 1000px) {
   .poem-title {
     margin-top: 1rem;
+  }
+}
+
+@media (max-width: 450px) {
+  .poem-page {
+    margin-left: 0;
+    margin-top: 0;
+    padding-left: 0;
+    padding-right: 0;
   }
 }

@@ -4,9 +4,6 @@ isPoem: true
 ---
 
 <article class="poem-page{% if poemClass %} {{ poemClass }}{% endif %}">
-  <header class="poem-header">
-    <h1 class="poem-title">{{ title }}</h1>
-  </header>
   <section class="poem-body">
     {{ content | safe }}
   </section>
