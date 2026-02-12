@@ -2,7 +2,6 @@
 title: You Hold It
 metaTitle: You Hold It - Aiden Seo
 layout: poem.njk
-permalink: /works/poems/you-hold-it/
 poemStylesheet: /assets/css/poems/you-hold-it.css
 poemClass: poem-you-hold-it
 ---

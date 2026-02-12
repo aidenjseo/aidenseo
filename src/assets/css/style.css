@@ -473,7 +473,7 @@ h6 {
 
 .page-title-text {
   font-family: "Crimson Text", Georgia, serif;
-  font-size: clamp(28px, calc(27.3px + 0.19vw), 30px);
+  font-size: 30px;
   font-weight: 800;
   font-style: normal;
   letter-spacing: 0.04em;
